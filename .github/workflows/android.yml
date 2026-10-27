@@ -68,7 +68,16 @@ jobs:
           arch: x86_64
           target: google_apis
           disable-animations: true
-          script: ./gradlew :data:security:connectedDebugAndroidTest --no-daemon
+          script: |
+            ./gradlew :data:security:connectedDebugAndroidTest :app:connectedDebugAndroidTest --no-daemon
+            mkdir -p demo-screenshots
+            adb pull /sdcard/Android/data/io.github.mani360.securedevicebridge/files/screenshots/. demo-screenshots/
+      - name: Upload actual app screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: demo-screenshots-api-${{ matrix.api-level }}
+          path: demo-screenshots/*.png
+          if-no-files-found: error
       - name: Upload Keystore instrumentation reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -77,4 +86,6 @@ jobs:
           path: |
             data/security/build/reports/androidTests/
             data/security/build/outputs/androidTest-results/
+            app/build/reports/androidTests/
+            app/build/outputs/androidTest-results/
           if-no-files-found: ignore
