@@ -1,0 +1,6 @@
+SecureDeviceBridge
+Copyright 2026 Manitosh Bepari
+
+Includes the Gradle wrapper from Gradle 8.7, licensed under Apache License 2.0.
+Upstream: https://github.com/gradle/gradle/tree/v8.7.0
+No employer or proprietary SDK source is included.
