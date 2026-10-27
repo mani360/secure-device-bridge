@@ -4,4 +4,4 @@ dependencyResolutionManagement {
     repositories { google(); mavenCentral() }
 }
 rootProject.name = "SecureDeviceBridge"
-include(":app", ":domain:device", ":test-support:fake-device")
+include(":app", ":domain:device", ":test-support:fake-device", ":domain:security", ":data:security")

@@ -22,6 +22,8 @@ android {
 }
 dependencies {
     implementation(project(":domain:device"))
+    implementation(project(":domain:security"))
+    implementation(project(":data:security"))
     implementation(project(":test-support:fake-device"))
     implementation(platform("androidx.compose:compose-bom:2024.10.01"))
     implementation("androidx.activity:activity-compose:1.9.3")
