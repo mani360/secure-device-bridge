@@ -1,5 +1,20 @@
 # Architecture
 
+## Module dependencies
+
+```mermaid
+flowchart TD
+    App[App / Compose dashboard] --> Device[Domain / device contract]
+    App --> Fake[Test support / fake device]
+    Fake --> Device
+    App --> Signing[Domain / signing contract]
+    App --> Adapter[Data / Android Keystore adapter]
+    Adapter --> Signing
+    Adapter --> Keystore[Android Keystore provider]
+```
+
+Arrows show code dependencies. The fake device and Keystore adapter implement separate contracts; the demo does not sign a live capture record.
+
 ## Current design
 
 `app -> domain:device <- test-support:fake-device`, with app wiring the fake implementation into a ViewModel. The domain exposes StateFlow; the dashboard collects state with lifecycle awareness. A ViewModel owns the device across activity recreation and launches capture in viewModelScope.

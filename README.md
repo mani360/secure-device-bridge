@@ -4,6 +4,12 @@ Android/Kotlin portfolio reference project for device integration, explicit stat
 
 **Status:** initial implementation. This is an educational portfolio project; physical device integration, real biometrics, and certificate trust workflows are not implemented.
 
+## Try the demo
+
+[Build and try the demo](docs/demo-guide.md) · [Architecture](docs/architecture.md)
+
+Android 8.0+; no scanner, account, or server required. Builds are for portfolio demonstration; no downloadable release is published.
+
 ## Implemented
 
 - Android app: `io.github.mani360.securedevicebridge`, Compose and Material 3.
@@ -11,8 +17,8 @@ Android/Kotlin portfolio reference project for device integration, explicit stat
 - Dashboard with connect, disconnect, synthetic capture, timeout, and detach simulation.
 - Reconnect and stale callback protection; coroutine cancellation handling.
 - Android Keystore P-256 / SHA256withECDSA signing, verification, tamper rejection, protection reporting, and demo key deletion.
-- JVM device lifecycle tests and Android Keystore instrumentation tests.
-- GitHub Actions for unit tests, Android lint, a debug build, and Keystore tests on API 29 and API 35 emulators.
+- JVM device lifecycle tests, Android Keystore instrumentation tests, and Compose UI smoke tests for recovery and signing.
+- GitHub Actions for unit tests, Android lint, a debug build, and Keystore and UI tests on API 29 and API 35 emulators.
 
 No employer code, commercial device SDKs, credentials, or real biometric data are included. The sample value is a fixed synthetic string, not a biometric template.
 
@@ -31,7 +37,7 @@ Installation requires an emulator or device running Android 8.0 / API 26 or late
 
 The pinned baseline is AGP 8.6.1, Gradle 8.7, Kotlin and Compose compiler 2.0.21, and compile/target SDK 35. This is a reproducible starter baseline, not a claim to use the latest SDK or meet future store submission requirements.
 
-## Try the demo
+## Demo scenarios
 
 1. Connect, then capture a synthetic sample.
 2. Simulate capture timeout; reconnect to recover.
@@ -63,6 +69,7 @@ Active Gradle modules: `app`, `domain:device`, `domain:security`, `data:security
 ## Design notes
 
 - [Architecture](docs/architecture.md)
+- [Demo walkthrough](docs/demo-guide.md)
 - [Device state machine](docs/device-state-machine.md)
 - [Failure handling](docs/failure-handling.md)
 - [Security and planned PKI work](docs/security.md)
