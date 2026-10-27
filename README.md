@@ -2,7 +2,7 @@
 
 Android/Kotlin portfolio reference project for device integration, explicit state management, and synthetic biometric capture. Built independently by Manitosh Bepari.
 
-**Status:** initial implementation. This is an educational portfolio project; physical hardware, real biometrics, PKI, and Keystore signing are not implemented.
+**Status:** initial implementation. This is an educational portfolio project; physical device integration, real biometrics, and certificate trust workflows are not implemented.
 
 ## Implemented
 
@@ -10,8 +10,9 @@ Android/Kotlin portfolio reference project for device integration, explicit stat
 - Device contract with observable states and a fake adapter.
 - Dashboard with connect, disconnect, synthetic capture, timeout, and detach simulation.
 - Reconnect and stale callback protection; coroutine cancellation handling.
-- JVM tests for state transitions, failure recovery, cancellation, and overlapping operations.
-- GitHub Actions definition for unit tests, Android lint, and a debug build. Run status is available after publication and execution.
+- Android Keystore P-256 / SHA256withECDSA signing, verification, tamper rejection, protection reporting, and demo key deletion.
+- JVM device lifecycle tests and Android Keystore instrumentation tests.
+- GitHub Actions for unit tests, Android lint, a debug build, and Keystore tests on API 29 and API 35 emulators.
 
 No employer code, commercial device SDKs, credentials, or real biometric data are included. The sample value is a fixed synthetic string, not a biometric template.
 
@@ -22,6 +23,8 @@ Use JDK 17 or 21 and an Android SDK with platform 35 and Build Tools 34.0.0. Set
 ```sh
 ./gradlew :test-support:fake-device:test :app:lintDebug :app:assembleDebug
 ./gradlew :app:installDebug
+# Requires a connected emulator or device:
+./gradlew :data:security:connectedDebugAndroidTest
 ```
 
 Installation requires an emulator or device running Android 8.0 / API 26 or later. The debug APK is produced at `app/build/outputs/apk/debug/app-debug.apk`.
@@ -34,6 +37,10 @@ The pinned baseline is AGP 8.6.1, Gradle 8.7, Kotlin and Compose compiler 2.0.21
 2. Simulate capture timeout; reconnect to recover.
 3. Start a capture and simulate detach or disconnect before it completes.
 4. Reconnect and capture again. An old operation must not overwrite the new session.
+5. Select **Create key & sign demo**. Check original verification, rejection of a changed sample, and the reported key protection.
+6. Select **Delete demo key**, then run signing again to create a new identity.
+
+The signing demo uses a separate fixed message; it does not certify a device capture. Keys do not require biometric/user authentication. Verification establishes consistency with the current local key, not a trusted person, hardware attestation, or a certificate chain.
 
 ## Structure
 
@@ -41,15 +48,17 @@ The pinned baseline is AGP 8.6.1, Gradle 8.7, Kotlin and Compose compiler 2.0.21
 app/                    Compose dashboard and app wiring
 core/{common,logging}/  Reserved shared boundaries
 domain/device/          Active Kotlin device contract
-domain/{biometric,security}/  Reserved contracts
-data/{device,biometric,security}/  Reserved adapters
+domain/security/        Active signing contract
+domain/biometric/       Reserved biometric contracts
+data/security/          Active Android Keystore adapter
+data/{device,biometric}/ Reserved hardware/capture adapters
 feature/{dashboard,device,capture,security,diagnostics}/  Reserved UI boundaries
 test-support/fake-device/  Active fake adapter and JVM tests
 docs/                   Architecture, lifecycle, failures, security, testing
 .github/workflows/      Build and test definition
 ```
 
-Only `app`, `domain:device`, and `test-support:fake-device` are active Gradle modules. Reserved folders contain scope notes; they are not implemented features.
+Active Gradle modules: `app`, `domain:device`, `domain:security`, `data:security`, and `test-support:fake-device`. Reserved folders contain scope notes; they are not implemented features.
 
 ## Design notes
 
@@ -62,7 +71,7 @@ Only `app`, `domain:device`, and `test-support:fake-device` are active Gradle mo
 
 ## Next milestones
 
-- Add Android Keystore signing and verification with instrumentation tests.
+- Add authentication-gated signing and explicit handling for invalidated keys.
 - Define certificate validation policy before adding PKI workflows.
 - Extract feature modules when boundaries justify separate builds.
 - Introduce a public, redistributable physical device adapter only when licensing permits.

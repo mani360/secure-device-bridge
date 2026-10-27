@@ -6,9 +6,11 @@
 
 The fake adapter serializes state mutations and uses a session generation to discard completions after detach, disconnect, or reconnect. It deliberately has no Android dependency.
 
+`domain:security` provides a blocking signing contract. `data:security` implements it with Android Keystore. The app ViewModel wires the adapter and runs operations off the main thread.
+
 ## Planned boundaries
 
-The reserved core, data, biometric, security, and feature folders document intended responsibilities. They are not Gradle modules yet. Extract them when a concrete second consumer or adapter warrants the boundary. The fake adapter is intentionally included in this demonstration app.
+The reserved core, device/biometric data, biometric domain, and feature folders document intended responsibilities. They are not Gradle modules yet. Extract them when a concrete second consumer or adapter warrants the boundary. The fake adapter is intentionally included in this demonstration app.
 
 ## Open decisions
 
