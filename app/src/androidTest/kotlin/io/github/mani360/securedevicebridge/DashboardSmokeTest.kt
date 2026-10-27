@@ -1,11 +1,9 @@
 package io.github.mani360.securedevicebridge
 
-import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.platform.app.InstrumentationRegistry
-import android.graphics.Bitmap
-import java.io.File
+import java.io.FileInputStream
 import org.junit.Rule
 import org.junit.Test
 
@@ -19,10 +17,14 @@ class DashboardSmokeTest {
     }
     private fun screenshot(name: String) {
         compose.waitForIdle()
-        val directory = File(InstrumentationRegistry.getInstrumentation().targetContext.getExternalFilesDir(null), "screenshots").apply { mkdirs() }
-        File(directory, name).outputStream().use {
-            check(compose.onRoot().captureToImage().asAndroidBitmap().compress(Bitmap.CompressFormat.PNG, 100, it))
+        val automation = InstrumentationRegistry.getInstrumentation().uiAutomation
+        fun shell(command: String) {
+            automation.executeShellCommand(command).use { descriptor ->
+                FileInputStream(descriptor.fileDescriptor).use { it.readBytes() }
+            }
         }
+        shell("mkdir -p /sdcard/Download/secure-device-bridge")
+        shell("screencap -p /sdcard/Download/secure-device-bridge/$name")
     }
 
     @Test fun deviceCaptureAndTimeoutRecover() {

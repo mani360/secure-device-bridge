@@ -71,7 +71,7 @@ jobs:
           script: |
             ./gradlew :data:security:connectedDebugAndroidTest :app:connectedDebugAndroidTest --no-daemon
             mkdir -p demo-screenshots
-            adb pull /sdcard/Android/data/io.github.mani360.securedevicebridge/files/screenshots/. demo-screenshots/
+            adb pull /sdcard/Download/secure-device-bridge/. demo-screenshots/
       - name: Upload actual app screenshots
         uses: actions/upload-artifact@v4
         with:
